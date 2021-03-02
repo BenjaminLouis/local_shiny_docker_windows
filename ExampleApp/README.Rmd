@@ -1,0 +1,83 @@
+---
+title: "Installation de l'outil AnalyseEssai"
+author: "Benjamin Louis"
+date: "16/02/2021"
+output: html_document
+---
+
+# Introduction
+
+OS : Windows 10 64-bit: Pro, Enterprise, or Education (Build 17134 or later). [https://docs.docker.com/docker-for-windows/install/]()
+
+Windows HOME \>= 1903 [https://docs.docker.com/docker-for-windows/install-windows-home/]()
+
+Lancement : Docker
+
+Outil : R Shiny + autres (LICENCE)
+
+Si fonctionne pas : Contact
+
+# Installation de docker
+
+## C'est quoi
+
+## Etapes
+
+### Activer WSL 2
+
+[https://korben.info/installer-wsl2-windows-linux.html]()
+
+[https://docs.microsoft.com/fr-fr/windows/wsl/install-win10](https://docs.microsoft.com/en-us/windows/wsl/install-win10)
+
+-   PowerShell en mode admin
+
+-   Activer WSL 1 en entrant :
+
+        dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+
+-   Vérifier la version : [https://docs.microsoft.com/fr-fr/windows/wsl/install-win10\#step-2---check-requirements-for-running-wsl-2](https://docs.microsoft.com/fr-fr/windows/wsl/install-win10#step-2—check-requirements-for-running-wsl-2)
+
+-   Activer WSL 2 en entrant :
+
+```{=html}
+<!-- -->
+```
+    dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all
+
+et en redémarrant la machine
+
+-   Télécharger le package de mise à jour du noyau linux en cliquant sur [\<https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi\>]() et installer le (en double-cliquant sur le fichier télécharger)
+
+-   définir WSL 2 comme version par défaut --\> PowerShell -\>
+
+        wsl --set-default-version 2
+
+-   Installer une distribution Linux de votre choix : Ouvrez le [Microsoft Store](https://aka.ms/wslstore) et sélectionnez votre distribution Linux préférée.
+
+### Installer docker
+
+-   Télécharger et installer Docker en double cliquant sur le fichier téléchargée <https://hub.docker.com/editions/community/docker-ce-desktop-windows/>
+
+-   Ne pas oubliez de cocher la case relative au WSL 2 quand demandée
+
+-   Redémarrer
+
+-   Vérification : ouvrir PowerShell et entrer :
+
+        docker run hello-world
+
+# Installer l'outil
+
+-   Assurez-vous que docker est allumé
+
+-   Ouvrir PowerShell en mode admin
+
+-   Naviguer dans le fichier de l'image : e.g. cd C:/Users/benjaminlouis/Desktop/dossier_outil
+
+-   Entrer la commande docker build -t analyseessai . (analyse essai peut être remplacé par le nom que vous voulez. Ca peut prendre plusieurs (dizaines de) minutes
+
+# Lancer l'outil
+
+## En ligne de commande
+
+## Via docker desktop
