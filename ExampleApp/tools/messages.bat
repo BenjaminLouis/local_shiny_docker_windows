@@ -23,6 +23,7 @@ goto :end
 :: docker introduction
 :dockintro
 echo VERIFICATION DE FONCTIONNEMENT DE DOCKER !
+echo ------------------------------------------
 goto :end
 
 :: docker waiting
@@ -40,6 +41,7 @@ goto :end
 :: folder chooser intro
 :foldintro
 echo CHOIX D'UN DOSSIER D'EXPORT !
+echo -----------------------------
 goto :end
 
 :: folder choice
@@ -50,6 +52,7 @@ goto :end
 :: launching application
 :launchapp
 echo LANCEMENT DE L'APPLICATION
+echo --------------------------
 echo.
 echo Preparation de l'application...
 goto :end
