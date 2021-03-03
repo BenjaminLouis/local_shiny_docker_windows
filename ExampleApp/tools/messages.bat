@@ -13,12 +13,26 @@ goto :%lg%
 
 goto :%which%
 
+:: docker image installation
+:dockinstall
+echo ========================================================
+echo    INSTALLATION  DE %name%    
+echo ========================================================
+goto :end
+
+:: image installation
+:imginstall
+echo INSTALLATION DE L'IMAGE DOCKER !
+echo --------------------------------
+goto :end
+
 :: introduction
 :introduction
 echo ========================================================
 echo    LANCEMENT DE %name%    
 echo ========================================================
 goto :end
+
 
 :: docker introduction
 :dockintro
