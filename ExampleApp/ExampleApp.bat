@@ -12,15 +12,15 @@ set img=exampleapp
 
 :: INTRODUCTION
 :: ------------
-call tools/introduction
+call tools/messages introduction
 
 :: CHECKING IF DOCKER IS RUNNING AND LAUNCHING IT IF NOT
 :: ------------------------------------------------------
-call tools/docker_intro
+call tools/messages dockintro
 docker ps >nul 2>nul
 if not %errorlevel% == 0 (
     start %dockerpath%
-    call tools/docker_waiting
+    call tools/messages dockwait
     timeout /t 1 /nobreak >nul
 )
 :checkdocker
@@ -32,22 +32,22 @@ if %errorlevel% == 0 (
      goto :checkdocker
 )
 :dockerok
-call tools/docker_running
+call tools/messages dockrun
 
 :: CHOOSING A FOLDER WHERE TO EXPORT RESULT
 :: ----------------------------------------
 :: fchooser.bat
 :: launches a folder chooser and outputs choice to the console
 :: https://stackoverflow.com/a/15885133/1683264
-call tools/fchooser_intro
+call tools/messages foldintro
 call tools/fchooser 
-call tools/fchooser_choice
+call tools/messages foldchoice
 
 :: RUNNING DOCKER CONTAINER AND WAITING FOR localhost TO RESPOND
 :: -------------------------------------------------------------
-call tools/run_intro
+call tools/messages launchapp
 docker run --rm -d -v %folder%:/export -p %port%:%port% %img% >nul
-call tools/run_waiting
+call tools/messages waitapp
 :pinglocal
 curl -s 127.0.0.1:%port% >nul
 if %errorlevel% == 0 (
@@ -59,7 +59,6 @@ if %errorlevel% == 0 (
 
 :: STARTING localhost
 :: ------------------
-call tools/run_running
 start http://127.0.0.1:%port%
 
 endlocal
