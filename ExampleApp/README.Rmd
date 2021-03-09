@@ -1,5 +1,5 @@
 ---
-title: "Installation de l'outil AnalyseEssai"
+title: "Installation de l'outil ExampleApp"
 author: "Benjamin Louis"
 date: "16/02/2021"
 output: html_document
@@ -7,77 +7,132 @@ output: html_document
 
 # Introduction
 
-OS : Windows 10 64-bit: Pro, Enterprise, or Education (Build 17134 or later). [https://docs.docker.com/docker-for-windows/install/]()
+Ce document est un manuel d'installation de l'outil ExampleApp dont le but est d'aider au nettoyage et à l'analyse de données spatiales d'expérimentation agronomique.
 
-Windows HOME \>= 1903 [https://docs.docker.com/docker-for-windows/install-windows-home/]()
+L'outil est une application web développé par [Benjamin Louis](https://benjaminlouis-stat.fr/ "URL developpeur") via la technologie [Shiny](https://shiny.rstudio.com/) utilisable à l'aide du logiciel [R](https://www.r-project.org/), ainsi que d'autres packages dont la liste est visible dans la section *a propos* de l'outil. Il est sous licence GPL-3 dont le texte et fournie avec cet outil dans le document appelé *License* (et License.note???).
 
-Lancement : Docker
+L'installation et l'utilisation a été développé pour fonctionner via [Docker](https://www.docker.com/ "docker") en local. La première partie de ce document explique les avantages de ce mode d'utilisation et décrit comment installer docker. Cet outil ayant été développé pour un ordinateur sous le système d'exploitation windows, ce manuel est surtout valable dans ce cadre. Cependant, l'installation pourrait se faire sur d'autres systèmes d'exploitation.
 
-Outil : R Shiny + autres (LICENCE)
+Les systèmes d'exploitation windows requis pour cette installation sont :
 
-Si fonctionne pas : Contact
+-   Windows 10 64-bit: Pro, Enterprise, ou Education (Build 17134 or later). [https://docs.docker.com/docker-for-windows/install/]()
+
+-   Windows HOME \>= 1903 [https://docs.docker.com/docker-for-windows/install-windows-home/]()
+
+L'ensemble des éléments pour le bon fonctionnement de l'outil se trouve dans le dossier parent de ce manuel. Vous ne devez jamais déplacer ces fichiers.
+
+Le manuel est prévu pour que l'utilisateur ait une autonomie d'installation. En cas de difficultés, vous pouvez contacter l'auteur à [contact\@benjaminlouis-stat.fr](contact@benjaminlouis-stat.fr).
 
 # Installation de docker
 
-## C'est quoi
+## C'est quoi docker ?
+
+[Docker](https://www.docker.com/ "docker") est un logiciel qui permet de *"mimer"* des environnements isolé pour pouvoir empaqueter des applications dans un endroit où l'on est sur qu'elle fonctionne. Ces environnements isolés sont appelés conteneurs. Ceci permet d'installer tout ce dont l'application peut avoir besoin (y compris elle-même) et éviter que des manipulations ultérieures sur la machine où elle est installée puisse compromettre son utilisation.
+
+L'installation de docker est possible sur Windows 64-bit avec des minimums de versions. Des explications d'installation sont disponibles dans les liens suivants.
+
+-   Pour Windows 10 64-bit Pro, Enterprise, ou Education (Build 17134 ou supérieure) : <https://docs.docker.com/docker-for-windows/install/>
+
+-   Pour Windows 10 64-bit Home (build 1903 ou supérieure) : <https://docs.docker.com/docker-for-windows/install-windows-home/>
+
+Pour faciliter l'installation les différentes étapes requises sont décrites ci-dessous. Si Docker est déjà installé mais que vous voulez repartir de zéro, il est conseillé de désinstaller la version actuellement installé.
 
 ## Etapes
 
 ### Activer WSL 2
 
-[https://korben.info/installer-wsl2-windows-linux.html]()
+WSL 2 pour *Windows Subsystem for Linux* permet d'exécuter sur un système windows des fichiers initialement exécutable uniquement sur des distributions Linux. L'installation de WLS 2 est essentiel pour pouvoir installer Docker, ainsi qu'une distribution Linux. Les étapes décrites ci-dessous sont reprises des sources suivantes :
 
-[https://docs.microsoft.com/fr-fr/windows/wsl/install-win10](https://docs.microsoft.com/en-us/windows/wsl/install-win10)
+-   <https://docs.microsoft.com/fr-fr/windows/wsl/install-win10>
 
--   PowerShell en mode admin
+-   <https://korben.info/installer-wsl2-windows-linux.html>
 
--   Activer WSL 1 en entrant :
+De nombreuses images y sont disponibles, n'hésitez pas à les consulter. Il est important de bien suivre les différentes étapes une à une :
+
+1.  Ouvrez PowerShell en mode administrateur. Pour cela tapez *PowerShell* dans la barre de recherche Windows, clique droit sur *Windows PowerShell* et *Exécuter en tant qu'administrateur*
+
+2.  Activer WSL 1 en entrant la ligne de commande :
 
         dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
 
--   Vérifier la version : [https://docs.microsoft.com/fr-fr/windows/wsl/install-win10\#step-2---check-requirements-for-running-wsl-2](https://docs.microsoft.com/fr-fr/windows/wsl/install-win10#step-2—check-requirements-for-running-wsl-2)
+3.  Vérifier la configuration requise pour exécuter WSL 2 en suivant cette étape : <https://docs.microsoft.com/fr-fr/windows/wsl/install-win10#step-2---check-requirements-for-running-wsl-2>
 
--   Activer WSL 2 en entrant :
+4.  Si tout est bon, activer maintenant WSL 2 en entrant :
 
-```{=html}
-<!-- -->
-```
-    dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all
+        dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all 
 
-et en redémarrant la machine
+    et en redémarrant la machine
 
--   Télécharger le package de mise à jour du noyau linux en cliquant sur [\<https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi\>]() et installer le (en double-cliquant sur le fichier télécharger)
+5.  Télécharger le package de mise à jour du noyau linux en cliquant sur <https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi> (attention ce lien télécharge l'exécutable) et installer le (en double-cliquant sur le fichier téléchargé)
 
--   définir WSL 2 comme version par défaut --\> PowerShell -\>
+6.  Définir WSL 2 comme version par défaut. Pour cela ouvrir PowerShell en mode administrateur puis entrer la ligne de commande suivante :
 
         wsl --set-default-version 2
 
--   Installer une distribution Linux de votre choix : Ouvrez le [Microsoft Store](https://aka.ms/wslstore) et sélectionnez votre distribution Linux préférée.
+7.  Installer une distribution Linux de votre choix : Ouvrez le [Microsoft Store](https://aka.ms/wslstore) ( vous pouvez le chercher via la barre de recherche Windows) et sélectionnez une distribution Linux à installer. La distribution choisie n'a que peu d'importance. Si vous ne savez pas laquelle choisir, chercher Debian ou Ubuntu dans le [Microsoft Store](https://aka.ms/wslstore) par exemple.
 
 ### Installer docker
 
--   Télécharger et installer Docker en double cliquant sur le fichier téléchargée <https://hub.docker.com/editions/community/docker-ce-desktop-windows/>
+Des copies d'écran et informations supplémentaires sont disponibles dans ces liens
 
--   Ne pas oubliez de cocher la case relative au WSL 2 quand demandée
+-   <https://korben.info/installer-docker-windows-home.html>
 
--   Redémarrer
+Les étapes pour installer Docker sont :
 
--   Vérification : ouvrir PowerShell et entrer :
+1.  Télécharger docker en suivant ce lien [<https://hub.docker.com/editions/community/docker-ce-desktop-windows/>](https://hub.docker.com/editions/community/docker-ce-desktop-windows/){.uri} et installer-le en double cliquant sur le fichier téléchargé
+
+2.  Pendant l'installation, lorsque ça vous est demandé, ne pas oubliez de cocher la case relative au WSL 2.
+
+3.  Redémarrer votre ordinateur
+
+4.  Vérifier la bonne installation de docker : lancer docker si il ne s'est pas lancé au démarrage, ouvrir PowerShell et entrer :
 
         docker run hello-world
 
+    Un message disant entre autre que docker fonctionne bien doit s'afficher.
+
 # Installer l'outil
 
--   Assurez-vous que docker est allumé
+## Via le fichier Batch
 
--   Ouvrir PowerShell en mode admin
+Dans le dossier parent de de ce manuel se trouve un fichier batch appelé \`Installation.bat\`. Vous pouvez double cliqué dessus pour lancer l'installation de l'outil.
 
--   Naviguer dans le fichier de l'image : e.g. cd C:/Users/benjaminlouis/Desktop/dossier_outil
+## Via les lignes de commandes
 
--   Entrer la commande docker build -t analyseessai . (analyse essai peut être remplacé par le nom que vous voulez. Ca peut prendre plusieurs (dizaines de) minutes
+Il est également possible de lancer l'installation de l'outil via des lignes de commande si le fichier batch venez à ne pas fonctionner ou que l'utilisteur préfère. Pour cela :
+
+-   Assurez-vous que docker est lancé. Si ce n'est pas le cas lancer-le en recherchant Docker dans la barre de recherche Windows et en lançant l'applicatoin Docker Desktop.
+
+-   Ouvrir PowerShell en mode administrateur
+
+-   Naviguer dans le dossier racine où se trouve l'application (dossier parent de ce manuel) à l'aide de la commande `cd`. Par exemple, si le chemin du dossier en question est \_C:/Users/benjaminlouis/Desktop/dossier_outil\_ , tapez :
+
+        cd C:/Users/benjaminlouis/Desktop/dossier_outil
+
+-   Entrer ensuite la commande suivante
+
+        docker build -t exampleapp .
+
+    L'installation peut prendre plusieurs (dizaines de) minutes.
 
 # Lancer l'outil
 
+## Via le fichier Batch
+
+Dans le dossier parent de ce manuel se trouve un fichier batch appelé `ExampleApp.bat`. Vous pouvez double cliqué dessus pour lancer l'application.
+
 ## En ligne de commande
 
-## Via docker desktop
+Il est également possible de lancer l'application via des lignes de commande. Pour cela :
+
+-   Assurez-vous que docker est lancé. Si ce n'est pas le cas lancer-le en recherchant Docker dans la barre de recherche Windows et en lançant l'applicatoin Docker Desktop.
+
+-   Ouvrir PowerShell en mode administrateur
+
+-   Entrer ensuite la commande suivante
+
+        docker run --rm -d -v %folder%:/export -p 80:80 exampleapp
+
+    Vous devez remplacer `%folder%` par le chemin d'un dossier d'export des résultats issus de l'application. Par exemple, dans mon cas, si je veux que les exports de l'application soient sauvegardés dans un dossier appelé `sauvegarde_exampleapp`, il faut que je rentre en ligne de commande :
+
+        docker run --rm -d -v C:/Users/benjaminlouis/Desktop/sauvegarde_exampleapp:/export -p 80:80 exampleapp
